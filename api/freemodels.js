@@ -1,8 +1,8 @@
 // File: api/freemodels.js
 
-import axios from 'axios';
+const axios = require('axios');
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
   const GROQ_API_KEY = "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";
 
   const prompt = req.query.prompt || "Hello, what's the latest free model?";
@@ -32,7 +32,7 @@ export default async function handler(req, res) {
       return res.status(404).json({ status: 'error', message: 'No free models available' });
     }
 
-    const modelToUse = freeModels[0].id; // use the first matching free model
+    const modelToUse = freeModels[0].id;
 
     const chatResponse = await axios.post('https://api.groq.com/openai/v1/chat/completions', {
       model: modelToUse,
@@ -58,4 +58,4 @@ export default async function handler(req, res) {
     console.error('Error:', error.response?.data || error.message);
     res.status(500).json({ status: 'error', message: 'Failed to process request' });
   }
-}
+};
